@@ -15,9 +15,9 @@ namespace NMS_PauseBeGone
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static System.Timers.Timer aTimer;
+        private static System.Timers.Timer? aTimer;
         [DllImport("user32.dll")]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        public static extern IntPtr FindWindow(string? lpClassName, string lpWindowName);
         [DllImport("user32.dll")]
         private static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
@@ -75,7 +75,7 @@ namespace NMS_PauseBeGone
                 { //找到窗口
                     label_gameStatus.Content = lang_map["label_gameStatus"] + lang_map["gameStatus_on"];
                     label_gameStatus.Foreground = new SolidColorBrush(Colors.Green);
-                    if ((bool)chkbox_active.IsChecked)
+                    if (chkbox_active.IsChecked == true)
                     {
                         PostMessage(hWnd, 0x006, new IntPtr(1), IntPtr.Zero);
                     }
