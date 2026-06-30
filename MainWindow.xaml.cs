@@ -21,7 +21,7 @@ namespace NMS_PauseBeGone
         [DllImport("user32.dll")]
         private static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
-        private Dictionary<string, string> lang_map = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> lang_map = [];
 
 
         protected override void OnClosing(CancelEventArgs e)
