@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Reflection;
+using System.Threading;
 
 namespace NMS_PauseBeGone
 {
@@ -14,10 +15,20 @@ namespace NMS_PauseBeGone
     /// </summary>
     public partial class App : Application
     {
+        private const string MutexName = "Local\\NMS_PauseBeGone_{06678B8B-3BCC-4CB6-BE40-FC2332A77444}";
+        private Mutex? _mutex;
         private readonly System.Windows.Forms.NotifyIcon _notifyIcon = new();
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            _mutex = new Mutex(true, MutexName, out bool createdNew);
+            if (!createdNew)
+            {
+                MessageBox.Show("Another instance of NMS_PauseBeGone is already running.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.Current.Shutdown(1);
+                return;
+            }
+
             var appAssembly = Assembly.GetExecutingAssembly();
             using (var appIcon = appAssembly.GetManifestResourceStream("NMS_PauseBeGone.nms.ico"))
             {
@@ -40,6 +51,9 @@ namespace NMS_PauseBeGone
             _notifyIcon.Visible = true;
 
             base.OnStartup(e);
+
+            var mainWindow = new MainWindow();
+            mainWindow.Show();
         }
 
         private void OpenWindow()
@@ -74,6 +88,9 @@ namespace NMS_PauseBeGone
         protected override void OnExit(ExitEventArgs e)
         {
             _notifyIcon.Dispose();
+
+            _mutex?.ReleaseMutex();
+            _mutex?.Dispose();
             base.OnExit(e);
         }
     }
