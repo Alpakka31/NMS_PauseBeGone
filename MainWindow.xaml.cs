@@ -39,7 +39,7 @@ namespace NMS_PauseBeGone
 
             //启动时钟
             aTimer = new System.Timers.Timer(500);
-            aTimer.Elapsed += new System.Timers.ElapsedEventHandler(dt_Tick);
+            aTimer.Elapsed += new System.Timers.ElapsedEventHandler(Dt_Tick);
             aTimer.Enabled = true;
 
             //初始化语言
@@ -65,7 +65,7 @@ namespace NMS_PauseBeGone
 
         }
 
-        void dt_Tick(object sender, EventArgs e)
+        void Dt_Tick(object sender, EventArgs e)
         {
             IntPtr hWnd = FindWindow(null, "No Man's Sky");
             //Trace.WriteLine(hWnd);
